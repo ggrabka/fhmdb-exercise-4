@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.controllers.MovieListController;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.SortedState;
@@ -11,27 +12,27 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HomeControllerTest {
-    private static HomeController homeController;
+class MovieListControllerTest {
+    private static MovieListController movieListController;
     @BeforeAll
     static void init() {
-        homeController = new HomeController();
+        movieListController = new MovieListController();
     }
 
     @Test
     void at_initialization_allMovies_and_observableMovies_should_be_filled_and_equal() {
-        homeController.initializeState();
-        assertEquals(homeController.allMovies, homeController.observableMovies);
+        movieListController.initializeState();
+        assertEquals(movieListController.allMovies, movieListController.observableMovies);
     }
 
     @Test
     void if_not_yet_sorted_sort_is_applied_in_ascending_order() {
         // given
-        homeController.sortedState = SortedState.NONE;
-        homeController.setMovieList(Movie.initializeMovies());
+        movieListController.sortedState = SortedState.NONE;
+        movieListController.setMovieList(Movie.initializeMovies());
 
         // when
-        homeController.sortMovies();
+        movieListController.sortMovies();
 
         // then
         List<Movie> expected = Arrays.asList(
@@ -58,18 +59,18 @@ class HomeControllerTest {
 
         );
 
-        assertEquals(expected, homeController.observableMovies);
+        assertEquals(expected, movieListController.observableMovies);
 
     }
 
     @Test
     void if_last_sort_ascending_next_sort_should_be_descending() {
         // given
-        homeController.setMovieList(Movie.initializeMovies());
-        homeController.sortedState = SortedState.ASCENDING;
+        movieListController.setMovieList(Movie.initializeMovies());
+        movieListController.sortedState = SortedState.ASCENDING;
 
         // when
-        homeController.sortMovies();
+        movieListController.sortMovies();
 
         // then
         List<Movie> expected = Arrays.asList(
@@ -95,17 +96,17 @@ class HomeControllerTest {
                         Arrays.asList(Genre.ANIMATION, Genre.DRAMA, Genre.ACTION))
         );
 
-        assertEquals(expected, homeController.observableMovies);
+        assertEquals(expected, movieListController.observableMovies);
     }
 
     @Test
     void if_last_sort_descending_next_sort_should_be_ascending() {
         // given
-        homeController.setMovieList(Movie.initializeMovies());
-        homeController.sortedState = SortedState.DESCENDING;
+        movieListController.setMovieList(Movie.initializeMovies());
+        movieListController.sortedState = SortedState.DESCENDING;
 
         // when
-        homeController.sortMovies();
+        movieListController.sortMovies();
 
         // then
         List<Movie> expected = Arrays.asList(
@@ -132,18 +133,18 @@ class HomeControllerTest {
 
         );
 
-        assertEquals(expected, homeController.observableMovies);
+        assertEquals(expected, movieListController.observableMovies);
 
     }
 
     @Test
     void query_filter_matches_with_lower_and_uppercase_letters(){
         // given
-        homeController.setMovieList(Movie.initializeMovies());
+        movieListController.setMovieList(Movie.initializeMovies());
         String query = "IfE";
 
         // when
-        List<Movie> actual = homeController.filterByQuery(homeController.observableMovies, query);
+        List<Movie> actual = movieListController.filterByQuery(movieListController.observableMovies, query);
 
         // then
         List<Movie> expected = Arrays.asList(
@@ -163,47 +164,47 @@ class HomeControllerTest {
     @Test
     void query_filter_with_null_movie_list_throws_exception(){
         // given
-        homeController.setMovieList(Movie.initializeMovies());
+        movieListController.setMovieList(Movie.initializeMovies());
         String query = "IfE";
 
         // when and then
-        assertThrows(IllegalArgumentException.class, () -> homeController.filterByQuery(null, query));
+        assertThrows(IllegalArgumentException.class, () -> movieListController.filterByQuery(null, query));
     }
 
     @Test
     void query_filter_with_null_value_returns_unfiltered_list() {
         // given
-        homeController.setMovieList(Movie.initializeMovies());
+        movieListController.setMovieList(Movie.initializeMovies());
         String query = null;
 
         // when
-        List<Movie> actual = homeController.filterByQuery(homeController.observableMovies, query);
+        List<Movie> actual = movieListController.filterByQuery(movieListController.observableMovies, query);
 
         // then
-        assertEquals(homeController.observableMovies, actual);
+        assertEquals(movieListController.observableMovies, actual);
     }
 
     @Test
     void genre_filter_with_null_value_returns_unfiltered_list() {
         // given
-        homeController.setMovieList(Movie.initializeMovies());
+        movieListController.setMovieList(Movie.initializeMovies());
         Genre genre = null;
 
         // when
-        List<Movie> actual = homeController.filterByGenre(homeController.observableMovies, genre);
+        List<Movie> actual = movieListController.filterByGenre(movieListController.observableMovies, genre);
 
         // then
-        assertEquals(homeController.observableMovies, actual);
+        assertEquals(movieListController.observableMovies, actual);
     }
 
     @Test
     void genre_filter_returns_all_movies_containing_given_genre() {
         // given
-        homeController.setMovieList(Movie.initializeMovies());
+        movieListController.setMovieList(Movie.initializeMovies());
         Genre genre = Genre.DRAMA;
 
         // when
-        List<Movie> actual = homeController.filterByGenre(homeController.observableMovies, genre);
+        List<Movie> actual = movieListController.filterByGenre(movieListController.observableMovies, genre);
 
         // then
         assertEquals(4, actual.size());
@@ -212,14 +213,14 @@ class HomeControllerTest {
     @Test
     void no_filtering_ui_if_empty_query_or_no_genre_is_set() {
         // given
-        homeController.setMovies(Movie.initializeMovies());
-        homeController.setMovieList(Movie.initializeMovies());
+        movieListController.setMovies(Movie.initializeMovies());
+        movieListController.setMovieList(Movie.initializeMovies());
 
         // when
-        homeController.applyAllFilters("", null);
+        movieListController.applyAllFilters("", null);
 
         // then
-        assertEquals(homeController.allMovies, homeController.observableMovies);
+        assertEquals(movieListController.allMovies, movieListController.observableMovies);
     }
 
 }
