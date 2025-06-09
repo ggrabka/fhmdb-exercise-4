@@ -49,9 +49,9 @@ public class MovieListController implements Initializable {
 
     public List<Movie> allMovies;
 
-    protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
+    public ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
-    protected SortedState sortedState;
+    public SortedState sortedState;
 
     private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) -> {
         if (clickedItem instanceof Movie movie) {
