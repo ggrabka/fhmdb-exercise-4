@@ -5,15 +5,23 @@ import com.j256.ormlite.dao.Dao;
 import java.util.List;
 
 public class WatchlistRepository {
+    private static WatchlistRepository instance = null;
 
     Dao<WatchlistMovieEntity, Long> dao;
 
-    public WatchlistRepository() throws DataBaseException {
+    private WatchlistRepository() throws DataBaseException {
         try {
             this.dao = DatabaseManager.getInstance().getWatchlistDao();
         } catch (Exception e) {
             throw new DataBaseException(e.getMessage());
         }
+    }
+
+    public static WatchlistRepository getInstance() throws DataBaseException {
+        if (instance == null) {
+            instance = new WatchlistRepository();
+        }
+        return instance;
     }
 
     public List<WatchlistMovieEntity> getWatchlist() throws DataBaseException {
