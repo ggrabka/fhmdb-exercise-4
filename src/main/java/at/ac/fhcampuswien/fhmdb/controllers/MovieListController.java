@@ -55,6 +55,7 @@ public class MovieListController implements Initializable, Observer {
 
     public MovieListController() {
         System.out.println("MovieListController instantiated");
+        MovieListController.instance = this;
     }
 
     public static void setInstance(MovieListController ctrl) {
@@ -93,6 +94,11 @@ public class MovieListController implements Initializable, Observer {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeState();
         initializeLayout();
+        try {
+            WatchlistRepository.getInstance().addObserver(this);
+        } catch (DataBaseException e) {
+            e.printStackTrace();
+        }
     }
 
     public void initializeState() {
@@ -295,12 +301,13 @@ public class MovieListController implements Initializable, Observer {
         WatchlistRepository watchlistRepository = WatchlistRepository.getInstance();
         List<WatchlistMovieEntity> watchlistMovieEntityList = watchlistRepository.getWatchlist();
 
-        for(WatchlistMovieEntity watchlistMovieEntity : watchlistMovieEntityList) {
-            if(watchlistMovieEntity.getApiId().equals(movie.getApiId())) {
-                DialogUtil.showAlert("Watchlist",null,"Movie already in Watchlist!");
+        for (WatchlistMovieEntity watchlistMovieEntity : watchlistMovieEntityList) {
+            if (watchlistMovieEntity.getApiId().equals(movie.getApiId())) {
+                DialogUtil.showAlert("Watchlist", null, "Movie already in Watchlist!");
+                return;
             }
         }
-        watchlistRepository.addToWatchlist(movie);
-        DialogUtil.showAlert("Watchlist",null,"Movie added to Watchlist!");
+
+        DialogUtil.showAlert("Watchlist", null, "Movie added to Watchlist!");
     }
 }

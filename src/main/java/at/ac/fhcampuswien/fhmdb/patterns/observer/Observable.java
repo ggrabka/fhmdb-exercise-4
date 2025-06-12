@@ -6,4 +6,5 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 
 public interface Observable {
     void notifyObservers(WatchlistMovieEntity movie) throws DataBaseException;
+    void addObserver(Observer observer);
 }

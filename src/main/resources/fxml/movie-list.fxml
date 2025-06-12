@@ -10,7 +10,7 @@
 <VBox
         xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml"
-        fx:controller="at.ac.fhcampuswien.fhmdb.controllers.MovieListController"
+
         minHeight="575.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
     <HBox spacing="5.0" styleClass="background-black" stylesheets="@../styles/styles.css">
         <children>

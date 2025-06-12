@@ -8,11 +8,13 @@ import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 import org.h2.api.UserToRolesMapper;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -45,7 +47,7 @@ public class MainController {
         instance = ctrl;
     }
 
-    public void initialize() {
+    public void initialize() throws IOException {
         transition = new HamburgerBasicCloseTransition(hamburgerMenu);
         transition.setRate(-1);
         drawer.toBack();
@@ -81,21 +83,24 @@ public class MainController {
     }
 
     public void setContent(String fxmlPath) {
-        MyFactory myfactory = new MyFactory();
-        FXMLLoader loader = new FXMLLoader(MainController.class.getResource(fxmlPath));
-        loader.setControllerFactory(myfactory);
-        //this
-        if (fxmlPath.equals(UIComponent.MOVIELIST.path)) {
-            loader.setController(MovieListController.getInstance()); // works after constructor sets the instance
-        }
         try {
-            mainPane.setCenter(loader.load());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            FXMLLoader loader = new FXMLLoader(MainController.class.getResource(fxmlPath));
 
-        if (!isMenuCollapsed) {
-            toggleMenuDrawer();
+            if (fxmlPath.equals(UIComponent.MOVIELIST.path)) {
+                // create controller manually and set it
+                MovieListController controller = new MovieListController();
+                loader.setController(controller);
+            }
+
+            Parent root = loader.load();
+            mainPane.setCenter(root);
+
+            if (!isMenuCollapsed) {
+                toggleMenuDrawer();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -133,12 +138,12 @@ public class MainController {
     }
 
     @FXML
-    public void navigateToWatchlist() {
+    public void navigateToWatchlist() throws IOException {
         setContent(UIComponent.WATCHLIST.path);
     }
 
     @FXML
-    public void navigateToMovielist() {
+    public void navigateToMovielist() throws IOException {
         setContent(UIComponent.MOVIELIST.path);
     }
 }

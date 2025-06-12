@@ -22,6 +22,13 @@ public class WatchlistRepository implements Observable {
         }
     }
 
+    @Override
+    public void addObserver(Observer observer) {
+        if (!observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
     public static WatchlistRepository getInstance() throws DataBaseException {
         if (instance == null) {
             instance = new WatchlistRepository();
