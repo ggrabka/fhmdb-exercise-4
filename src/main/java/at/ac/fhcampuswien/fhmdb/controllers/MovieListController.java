@@ -51,6 +51,19 @@ public class MovieListController implements Initializable, Observer {
 
     public List<Movie> allMovies;
 
+    private static MovieListController instance;
+
+    public MovieListController() {
+        System.out.println("MovieListController instantiated");
+    }
+
+    public static void setInstance(MovieListController ctrl) {
+        instance = ctrl;
+    }
+
+    public static MovieListController getInstance() {
+        return instance;
+    }
 //    public ObservableList<Movie> observableMovies = FXCollections.observableArrayList();
 
 //    public ObservableList<Movie> observableMovies = sortButton.getObservableMovies();

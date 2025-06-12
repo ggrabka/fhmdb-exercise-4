@@ -24,6 +24,16 @@ public class WatchlistController implements Initializable {
 
     protected ObservableList<MovieEntity> observableWatchlist = FXCollections.observableArrayList();
 
+    private static WatchlistController instance;
+
+    public WatchlistController() {
+        instance = this; // Register the instance when JavaFX instantiates it
+    }
+
+    public static WatchlistController getInstance() {
+        return instance;
+    }
+
     private final ClickEventHandler onRemoveFromWatchlistClicked = (o) -> {
         if (o instanceof MovieEntity) {
             MovieEntity movieEntity = (MovieEntity) o;
