@@ -24,12 +24,22 @@ public class WatchlistController implements Initializable {
 
     protected ObservableList<MovieEntity> observableWatchlist = FXCollections.observableArrayList();
 
+    private static WatchlistController instance;
+
+    public WatchlistController() {
+        instance = this; // Register the instance when JavaFX instantiates it
+    }
+
+    public static WatchlistController getInstance() {
+        return instance;
+    }
+
     private final ClickEventHandler onRemoveFromWatchlistClicked = (o) -> {
         if (o instanceof MovieEntity) {
             MovieEntity movieEntity = (MovieEntity) o;
 
             try {
-                WatchlistRepository watchlistRepository = new WatchlistRepository();
+                WatchlistRepository watchlistRepository = WatchlistRepository.getInstance();
                 watchlistRepository.removeFromWatchlist(movieEntity.getApiId());
                 observableWatchlist.remove(movieEntity);
             } catch (DataBaseException e) {
@@ -44,10 +54,10 @@ public class WatchlistController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         List<WatchlistMovieEntity> watchlist = new ArrayList<>();
         try {
-            watchlistRepository = new WatchlistRepository();
+            watchlistRepository = WatchlistRepository.getInstance();
             watchlist = watchlistRepository.getWatchlist();
 
-            MovieRepository movieRepository = new MovieRepository();
+            MovieRepository movieRepository = MovieRepository.getInstance();
             List<MovieEntity> movies = new ArrayList<>();
 
             for(WatchlistMovieEntity movie : watchlist) {

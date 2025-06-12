@@ -2,6 +2,7 @@ package at.ac.fhcampuswien.fhmdb.api;
 
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.patterns.builder.MovieAPIRequestBuilder;
 import okhttp3.*;
 import com.google.gson.Gson;
 import java.util.Arrays;
@@ -53,7 +54,8 @@ public class MovieAPI {
     }
 
     public static List<Movie> getAllMovies(String query, Genre genre, String releaseYear, String ratingFrom) throws MovieApiException{
-        String url = buildUrl(query, genre, releaseYear, ratingFrom);
+//        String url = buildUrl(query, genre, releaseYear, ratingFrom);
+          String url = new MovieAPIRequestBuilder.Builder(DELIMITER,URL).genre(genre).query(query).releaseYear(releaseYear).ratingFrom(ratingFrom).build().toString();
         Request request = new Request.Builder()
                 .url(url)
                 .removeHeader("User-Agent")
